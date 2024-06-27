@@ -6,17 +6,24 @@ type State = {
   active: boolean
 }
 
+
 const initialState: State = {
   count: 0,
   active: false,
 }
 
+
+// if we have an initiate state object, resetting can be easier for large objects
+// this was made a function to avoid reactivity issues when resetting Refs
 const initStateFunc = () => ( {...initialState})
 
+// reactive cannot be used on primitives, docs recommend using ref for primitives
 let stateReactive = reactive<State>({
   ...initialState
 })
 
+// Docs recommend using ref over reactive, even for objects
+// ref can be used on primitives, 
 let stateRef = ref<State>(initStateFunc())
 
 function resetReactiveState() {
@@ -26,12 +33,12 @@ function resetReactiveState() {
   stateReactive.active = false
   stateReactive.count = 0
 
-  // reset whole state in reactive, cannot directly reassign like ref
+  // reset whole state in reactive, cannot directly reassign like ref, need Object.assign
   // Object.assign(stateReactive, initialState)
 }
 
 function resetRefState() {
-  // 2 ways for ref to reset, each item or whole state using an init state function
+  // 2 ways for ref object to reset, each item or whole state using an init state function
   // that destructs the initial state
 
 
@@ -68,14 +75,6 @@ function resetRefState() {
 <style scoped>
 .foo {
   text-align: center;
-}
-
-.bar {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin-top: 2rem;
-
 }
 
 .logo {
